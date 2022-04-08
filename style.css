@@ -1,0 +1,12 @@
+.pokemon-sprite
+{
+    height: 60vh;
+    max-height: 60vh;
+    max-width: 100%;
+}
+
+.container
+{
+    width: 100%;
+    text-align: center;
+}
