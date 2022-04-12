@@ -206,10 +206,10 @@ class Quizz
         console.log('started');
         this.started = true;
         this.pokemons = randomizeArray(pokedex.map(p => p.copy()));
+        this.total = this.pokemons.length;
         this.currentPokemon = this.pokemons.pop();
         this.currentProposition = "";
         this.rightAnswers = 0;
-        this.total = this.pokemons.length;
         document.getElementById('answer').focus();
     }
     stop()
@@ -274,6 +274,7 @@ class Quizz
         else 
         {
             this.terminate();
+            this.succeed();
         }
     }
     skip()
@@ -285,6 +286,10 @@ class Quizz
     {
         this.started = false;
         this.currentPokemon = undefined;
+    }
+    succeed()
+    {
+        m.route.set('/fireworks');
     }
     view()
     {
@@ -315,6 +320,27 @@ function installSW() {
 }
 installSW();
 
+class FireworkView
+{
+    constructor()
+    {
+        this.fireworks = undefined;
+    }
+    oncreate(vnode)
+    {
+        this.fireworks = new Fireworks(vnode.dom, { /* options */ })
+        this.fireworks.start();
+    }
+    ondestroy(vnode)
+    {
+        this.fireworks.stop();
+    }
+    view(vnode)
+    {
+        return m('.fireworks');
+    }
+}
+
 
 async function loadPokedex() {
     let promises = Array(151).fill(0).map((_,i) => createPokemonFromId(i+1));
@@ -326,5 +352,9 @@ async function loadPokedex() {
     return pokedex;
 }
 let pokedex = [];
-m.mount(root, Quizz);
+m.route(root, '/quizz',
+{
+    '/quizz': Quizz,
+    '/fireworks': FireworkView
+})
 loadPokedex().then(p => pokedex = p);
