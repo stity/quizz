@@ -343,7 +343,7 @@ class FireworkView
 
 
 async function loadPokedex() {
-    let promises = Array(151).fill(0).map((_,i) => createPokemonFromId(i+1));
+    let promises = Array(251).fill(0).map((_,i) => createPokemonFromId(i+1));
     let pokedex = [];
     for(let p of promises)
     {
